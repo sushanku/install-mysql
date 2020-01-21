@@ -26,7 +26,16 @@ templates folder has also the information of root password in file (root-my.cnf.
 Example Playbook
 ----------------
 
-T
+Then execute following command from outside the roles directory.\
+ansible-playbook mysqlsetup.yml
+
+Also, the following command will list the tags and run the tags accordingly.\
+ansible-playbook mysqlsetup.yml --list-tags
+
+For example to run the listed tags, execute the following command:\
+ansible-playbook mysqlsetup.yml -t Add_user\
+\
+-t flag let you use the tags. The above playbook will only add the new mysql user using the tags.
 
 Author Information
 ------------------
