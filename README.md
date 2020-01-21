@@ -1,38 +1,35 @@
 Role Name
 =========
 
-A brief description of the role goes here.
+This is ansible automation to install and use mysql 5.7 on Ubuntu Server.\
+Role name is install-mysql.\
+To use this ansible-playbook, first create a role directory and clone this repo.\
+Then, copy hosts file and mysqlsetup.yml from templates folder in outside of the roles directory.
 
 Requirements
 ------------
 
-Any pre-requisites that may not be covered by Ansible itself or the role should be mentioned here. For instance, if the role uses the EC2 module, it may be a good idea to mention in this section that the boto package is required.
+This mysql setup has been tested and applied in ubuntu 16.04 and 18.04.
+
 
 Role Variables
 --------------
 
-A description of the settable variables for this role should go here, including any variables that are in defaults/main.yml, vars/main.yml, and any variables that can/should be set via parameters to the role. Any variables that are read from other roles and/or the global scope (ie. hostvars, group vars, etc.) should be mentioned here as well.
+vars/main.yml contains the root user name and password.
+
 
 Dependencies
 ------------
 
-A list of other roles hosted on Galaxy should go here, plus any details in regards to parameters that may need to be set for other roles, or variables that are used from other roles.
+templates folder has also the information of root password in file (root-my.cnf.j2) which then will be copied after running the playbook as /root/.my.cnf. The module of mysql will attempt to read the credentials from ~/.my.cnf to login.
 
 Example Playbook
 ----------------
 
-Including an example of how to use your role (for instance, with variables passed in as parameters) is always nice for users too:
-
-    - hosts: servers
-      roles:
-         - { role: username.rolename, x: 42 }
-
-License
--------
-
-BSD
+T
 
 Author Information
 ------------------
 
-An optional section for the role authors to include contact information, or a website (HTML is not allowed).
+Sushan Kunwar\
+System Engineer/DevOps Engineer
