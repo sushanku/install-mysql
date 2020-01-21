@@ -1,0 +1,103 @@
+---
+- name: install python-mysqldb
+  apt:
+    name: python-mysqldb
+    state: present
+    update_cache: yes
+  
+
+#Install MySQL Server 
+- name: install mysql 5.7
+  apt:
+    name: mysql-server
+    state: present
+    update_cache: yes
+  tags: mysql_install
+ 
+
+#check if mysql service is started
+- name: Start the MySQL service
+  service: 
+    name: mysql 
+    state: started
+    enabled: true
+  tags: mysql_status
+
+# Update MySQL Root Password       
+- name: update mysql root password for all root accounts
+  mysql_user: 
+    login_user: root
+    login_password: "{{ mysql_root_password }}"
+    name: "{{ mysql_root_username }}" 
+    host: "{{ item }}" 
+    password: "{{ mysql_root_password }}"
+    check_implicit_admin: yes
+    priv: "*.*:ALL,GRANT"
+  with_items:
+    - 127.0.0.1
+    - ::1
+    - localhost 
+  tags: mysql_pw_update
+
+
+# Change MySQL Root password
+#- name: change mysql root password for all root accounts
+#  mysql_user:
+#    name: "{{ mysql_root_username }}"
+#    host: "{{ item }}"
+#    password: "{{ mysql_root_new_password }}"
+#    priv: "*.*:ALL,GRANT"
+#  with_items:
+#    - 127.0.0.1
+#    - ::1
+#    - localhost
+#  tags: mysql_pw_change 
+
+
+# Create .my.cnf
+- name: Create .my.cnf  
+  template:
+    src: root-my.cnf.j2
+    dest: /root/.my.cnf
+    owner: root
+    group: root
+    mode: 0600
+  tags: create_temp
+
+#create Database
+- name: Create Database
+  mysql_db:
+    name: test_data
+    state: present
+  tags: create_database
+
+
+- name: Remove Anonymous user
+  mysql_user:
+    name: ""
+    state: absent
+  with_items:
+    - 127.0.0.1
+    - ::1
+    - localhost 
+  tags: Remove_Anon
+
+- name: Add user
+  mysql_user:
+    name: sushan
+    password: sushan01
+    state: present
+  tags: Add_user
+
+- name: Delete user
+  mysql_user:
+    name: sushan
+    state: absent
+  tags: Delete_user
+
+- name: Delete Database
+  mysql_db:
+    name: test_data
+    state: absent
+  tags: remove_database
+ 
